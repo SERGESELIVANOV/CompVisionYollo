@@ -1,0 +1,36 @@
+﻿  ComputerVision.cpp
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\Constans.h(9,29): warning C4305: инициализация: усечение из "double" в "float"
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\Constans.h(11,36): warning C4305: инициализация: усечение из "double" в "float"
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\Constans.h(14,26): warning C4305: инициализация: усечение из "double" в "float"
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244: аргумент: преобразование "const float" в "_Tp", возможна потеря данных
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:         with
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:         [
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:             _Tp=int
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:         ]
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244: аргумент: преобразование "const float" в "_Tp", возможна потеря данных
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:         with
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:         [
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:             _Tp=int
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:         ]
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(40,46): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\pred_and_post_processes.h(40,26): warning C4267: инициализация: преобразование из "size_t" в "const int"; возможна потеря данных
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+  Создание кода
+  3 of 938 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  ComputerVision.vcxproj -> C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\x64\Release\ComputerVision.exe
