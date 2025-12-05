@@ -1,17 +1,38 @@
 ﻿  ComputerVision.cpp
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(26,29): warning C4305: инициализация: усечение из "double" в "float"
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(28,36): warning C4305: инициализация: усечение из "double" в "float"
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(31,26): warning C4305: инициализация: усечение из "double" в "float"
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,80): warning C4244: аргумент: преобразование "const float" в "_Tp", возможна потеря данных
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,80): warning C4244:         with
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,80): warning C4244:         [
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,80): warning C4244:             _Tp=int
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,80): warning C4244:         ]
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,67): warning C4244: аргумент: преобразование "const float" в "_Tp", возможна потеря данных
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,67): warning C4244:         with
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,67): warning C4244:         [
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,67): warning C4244:             _Tp=int
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(69,67): warning C4244:         ]
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(93,46): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\ComputerVision\ComputerVision.cpp(93,26): warning C4267: инициализация: преобразование из "size_t" в "const int"; возможна потеря данных
-  ComputerVision.vcxproj -> C:\Users\Сергей\Desktop\програмирование C++\Летний проект\ComputerVision\x64\Debug\ComputerVision.exe
+C:\detection\ComputerVision\ComputerVision\Constans.h(9,29): warning C4305: инициализация: усечение из "double" в "float"
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\detection\ComputerVision\ComputerVision\Constans.h(11,36): warning C4305: инициализация: усечение из "double" в "float"
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\detection\ComputerVision\ComputerVision\Constans.h(14,26): warning C4305: инициализация: усечение из "double" в "float"
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244: аргумент: преобразование "const float" в "_Tp", возможна потеря данных
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:         with
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:         [
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:             _Tp=int
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:         ]
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244: аргумент: преобразование "const float" в "_Tp", возможна потеря данных
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:         with
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:         [
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:             _Tp=int
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:         ]
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(40,46): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\detection\ComputerVision\ComputerVision\pred_and_post_processes.h(40,26): warning C4267: инициализация: преобразование из "size_t" в "const int"; возможна потеря данных
+  (компиляция исходного файла "ComputerVision.cpp")
+  
+C:\detection\ComputerVision\ComputerVision\ComputerVision.cpp(31,9): error C2653: сv: не является именем класса или пространства имен
+C:\detection\ComputerVision\ComputerVision\ComputerVision.cpp(31,14): error C2065: Mat: необъявленный идентификатор
+C:\detection\ComputerVision\ComputerVision\ComputerVision.cpp(31,18): error C2146: синтаксическая ошибка: отсутствие ";" перед идентификатором "frame"
+C:\detection\ComputerVision\ComputerVision\ComputerVision.cpp(31,18): error C2065: frame: необъявленный идентификатор
+C:\detection\ComputerVision\ComputerVision\ComputerVision.cpp(32,13): error C2065: frame: необъявленный идентификатор
+C:\detection\ComputerVision\ComputerVision\ComputerVision.cpp(37,55): error C2065: frame: необъявленный идентификатор
+C:\detection\ComputerVision\ComputerVision\ComputerVision.cpp(38,50): error C2065: frame: необъявленный идентификатор
+C:\detection\ComputerVision\ComputerVision\ComputerVision.cpp(39,38): error C2065: frame: необъявленный идентификатор

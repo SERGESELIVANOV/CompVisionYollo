@@ -19,30 +19,70 @@ void draw_label(cv::Mat& input_image, std::string label, int left, int top)
 cv::Mat drawDetections(cv::Mat& input_image, const std::vector<cv::Rect>& boxes, const std::vector<float>& confidences, const std::vector<int>& class_ids, const std::vector<std::string>& class_name)
 {
     std::vector<int> indices;
-    cv::Mat result_image = input_image.clone();
-    cv::dnn::NMSBoxes(boxes, confidences, SCORE_THRESHOLD, NMS_THRESHOLD, indices);
-    for (int i = 0; i < indices.size(); i++)
+    cv::Mat result_image;
+
+    // экономит врем€ на ненужном вызове NMSBoxes и клонировании
+    if (boxes.empty())
+    {
+        // копируем вместо клонировани€ - быстрее дл€ пустых случаев
+        input_image.copyTo(result_image);
+        return result_image;  //экономит много времени дл€ пустых изображений
+    }
+
+    // предотвращаем многократный доступ к глобальным переменным
+    const float score_threshold = SCORE_THRESHOLD;
+    const float nms_threshold = NMS_THRESHOLD;
+
+    cv::dnn::NMSBoxes(boxes, confidences, score_threshold, nms_threshold, indices);
+
+    // проверка результата NMS перед клонированием, т.к многие изображени€ могут не иметь детекций после NMS
+    if (indices.empty())
+    {
+        input_image.copyTo(result_image);
+        return result_image;
+    }
+
+    // только теперь клонируем изображение - когда уверены что будем рисовать
+    result_image = input_image.clone();
+    const int thickness = 3 * THICKNESS;
+    const cv::Scalar color = BLUE;
+    const size_t indices_size = indices.size();
+
+    for (size_t i = 0; i < indices_size; ++i)
     {
         int idx = indices[i];
-        if (idx < 0 || idx >= boxes.size() || idx >= confidences.size() ||
-            idx >= class_ids.size() || class_ids[idx] < 0 || class_ids[idx] >= class_name.size()) {
-            std::wcout << L"Ќеверный индекс или class_id: " << idx
-                << L", class_id: " << (idx < class_ids.size() ? class_ids[idx] : -1)
-                << L", размер class_name: " << class_name.size() << std::endl;
+        if (static_cast<size_t>(idx) >= boxes.size() ||
+            static_cast<size_t>(idx) >= confidences.size() ||
+            static_cast<size_t>(idx) >= class_ids.size())
+        {
             continue;
         }
-        cv::Rect box = boxes[idx];
+
+        int class_id = class_ids[idx];
+        // избегаем повторного доступа class_ids[idx]
+        if (class_id < 0 || static_cast<size_t>(class_id) >= class_name.size())
+        {
+            continue;
+        }
+        const cv::Rect& box = boxes[idx];
+
+        // вычисл€ем все координаты один раз
         int left = box.x;
         int top = box.y;
-        int width = box.width;
-        int height = box.height;
-        // рисовка ограничивающую рамку 
-        cv::rectangle(result_image, cv::Point(left, top), cv::Point(left + width, top + height), BLUE, 3 * THICKNESS);
-        // ѕолучаем метку дл€ имени класса и его достоверности 
-        std::stringstream ss;
-        ss << std::fixed << std::setprecision(2) << confidences[idx];
-        std::string label = class_name[class_ids[idx]] + ":" + ss.str();
-        // Ќарисуйте метки классов.
+        int right = left + box.width;
+        int bottom = top + box.height;
+        cv::rectangle(result_image, cv::Point(left, top), cv::Point(right, bottom),
+            color, thickness);
+
+        // статический буфер
+        float confidence = confidences[idx];
+        char confidence_str[16];
+
+        //snprintf не использует динамическое выделение пам€ти (вместо stringstream)
+        snprintf(confidence_str, sizeof(confidence_str), "%.2f", confidence);
+        std::string label = class_name[class_id];
+        label += ":";
+        label += confidence_str;
         draw_label(result_image, label, left, top);
     }
     return result_image;

@@ -145,6 +145,10 @@
     <ClInclude Include="pred_and_post_processes.h" />
     <ClInclude Include="Libraries.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\best.onnx" />
+    <None Include="..\lvis.names" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

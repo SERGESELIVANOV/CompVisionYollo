@@ -36,4 +36,8 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\best.onnx" />
+    <None Include="..\lvis.names" />
+  </ItemGroup>
 </Project>
