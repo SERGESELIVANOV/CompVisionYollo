@@ -32,31 +32,16 @@ Detection post_process(cv::Mat& input_image, std::vector<cv::Mat>& outputs, cons
         std::wcout << L" Выходы нейросети пустые" << std::endl;
         return result;
     }
-    // получение размеров из выходного тензора 
-    const auto& output = outputs[0];
-    // детекции (25200 для v5, 84000 для v11)
-    const int rows = output.size[1];
-    // Размерность модели (85 для v5, 84 для v11)
-    const int model_dimensions = output.size[2];
-    //расчет кол-ва классов в модели
-    const int model_num_classes = model_dimensions - 5
-    // Проверка согласованности
-    if (model_num_classes != class_name.size())
-    {
-        std::wcout << L"ВНИМАНИЕ: Количество классов в модели (" << model_num_classes << L") не совпадает с количеством в class_list (" << class_name.size() << L")" << std::endl;
-        std::wcout << L"Используется минимальное значение: " << std::min(model_num_classes, (int)class_name.size()) << std::endl;
-    }
     // Предварительный расчет
-    const int num_classes_to_check = std::min(model_num_classes, (int)class_name.size());
     const float x_factor = static_cast<float>(input_image.cols) / INPUT_WIDTH;
     const float y_factor = static_cast<float>(input_image.rows) / INPUT_HEIGHT;
     // Указатель на данные один раз
-    const float* data = output.ptr<float>();
+    const float* data = outputs[0].ptr<float>();
+    const int dimensions = class_name.size() + 5;
+    const int rows = 25200;
+    // Расчет порогов
     const float confidence_threshold = CONFIDENCE_THRESHOLD;
     const float score_threshold = SCORE_THRESHOLD;
-    const int dimensions = class_name.size() + 5;
-    // Динамическое определение для совместимости 11 и 5 версий (размер выходного тензора разный)
-    const int rows = outputs[0].size[1];
     // Резервируем память (Решил сделать 10 процентов обнаружений)
     result.class_ids.reserve(rows / 10);
     result.confidences.reserve(rows / 10);
@@ -72,7 +57,7 @@ Detection post_process(cv::Mat& input_image, std::vector<cv::Mat>& outputs, cons
             // Ручной поиск максимального класса (быстрее чем minMaxLoc)
             int max_class_id = 0;
             float max_class_score = classes_scores[0];
-            for (int j = 1; j < num_classes_to_check; ++j)
+            for (int j = 1; j < class_name.size(); ++j)
             {
                 if (classes_scores[j] > max_class_score)
                 {
@@ -95,7 +80,6 @@ Detection post_process(cv::Mat& input_image, std::vector<cv::Mat>& outputs, cons
                 int top = static_cast<int>((cy - 0.5f * h) * y_factor);
                 int width = static_cast<int>(w * x_factor);
                 int height = static_cast<int>(h * y_factor);
-
                 result.boxes.push_back(cv::Rect(left, top, width, height));
                 result.class_names.push_back(class_name[max_class_id]);
             }

@@ -19,12 +19,9 @@ bool fileExists(const std::string& path)
 
 std::string saveProcessedImage(cv::Mat& image, const std::string& tag_name)
 {
-    // проверка на пустой тег
-    std::string actual_tag = tag_name.empty() ? "no_detection" : tag_name;
     std::filesystem::path current_path = std::filesystem::current_path();
     std::string path_str = current_path.string();
     std::string main_tags_dir = "tags";
-
     if (!directoryExists(main_tags_dir))
     {
         std::cout << "Создаем основную папку tags..." << std::endl;

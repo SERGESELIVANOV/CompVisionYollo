@@ -19,7 +19,7 @@ int main()
     const std::filesystem::path pathPhoto = "C:/Users/Сергей/Desktop/програмирование C++/Летний проект/photo";
     // Загрузка модели 
     cv::dnn::Net net;
-    net = cv::dnn::readNet("C:/detection/ComputerVision/best.onnx");
+    net = cv::dnn::readNet("C:/detection/ComputerVision/yolo11n.onnx");
     for (const auto& entry : std::filesystem::directory_iterator(pathPhoto))
     {
         const std::string extension = entry.path().extension().string();
