@@ -10,16 +10,16 @@ int main()
     setlocale(LC_ALL, "Russian");
     // Загрузить список классов
     std::vector<std::string> class_list;
-    std::ifstream ifs("C:/detection/ComputerVision/lvis.names");
+    std::ifstream ifs("C:/Users/polezhaev/Desktop/forprog/coco.names");
     std::string line;
     while (getline(ifs, line))
     {
         class_list.push_back(line);
     }
-    const std::filesystem::path pathPhoto = "C:/Users/Сергей/Desktop/програмирование C++/Летний проект/photo";
+    const std::filesystem::path pathPhoto = "C:/Users/polezhaev/Desktop/forprog/photo";
     // Загрузка модели 
     cv::dnn::Net net;
-    net = cv::dnn::readNet("C:/detection/ComputerVision/yolo11n.onnx");
+    net = cv::dnn::readNet("C:/Users/polezhaev/Desktop/forprog/yolo11n.onnx");
     for (const auto& entry : std::filesystem::directory_iterator(pathPhoto))
     {
         const std::string extension = entry.path().extension().string();

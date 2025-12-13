@@ -27,80 +27,143 @@ std::vector<cv::Mat> pre_process(cv::Mat& input_image, cv::dnn::Net& net)
 Detection post_process(cv::Mat& input_image, std::vector<cv::Mat>& outputs, const std::vector<std::string>& class_name)
 {
     Detection result;
+
     if (outputs.empty() || outputs[0].empty())
     {
         std::wcout << L" Выходы нейросети пустые" << std::endl;
         return result;
     }
-    // получение размеров из выходного тензора 
-    const auto& output = outputs[0];
-    // детекции (25200 для v5, 84000 для v11)
-    const int rows = output.size[1];
-    // Размерность модели (85 для v5, 84 для v11)
-    const int model_dimensions = output.size[2];
-    //расчет кол-ва классов в модели
-    const int model_num_classes = model_dimensions - 5
-    // Проверка согласованности
-    if (model_num_classes != class_name.size())
-    {
-        std::wcout << L"ВНИМАНИЕ: Количество классов в модели (" << model_num_classes << L") не совпадает с количеством в class_list (" << class_name.size() << L")" << std::endl;
-        std::wcout << L"Используется минимальное значение: " << std::min(model_num_classes, (int)class_name.size()) << std::endl;
-    }
-    // Предварительный расчет
-    const int num_classes_to_check = std::min(model_num_classes, (int)class_name.size());
+
+    cv::Mat output = outputs[0];
+
+    // ДЕБАГ: Выводим размеры тензора
+    std::cout << "Размеры выхода: "
+        << "dims=" << output.dims
+        << ", size=[" << output.size[0] << ", "
+        << output.size[1] << ", " << output.size[2] << "]"
+        << std::endl;
+
+    // Вариант 1: Если формат [1, 84, 8400]
+    const int num_detections = output.size[2];  // 8400
+    const int num_features = output.size[1];    // 84
+
+    std::cout << "Особенности: " << num_features
+        << ", Детекций: " << num_detections << std::endl;
+
     const float x_factor = static_cast<float>(input_image.cols) / INPUT_WIDTH;
     const float y_factor = static_cast<float>(input_image.rows) / INPUT_HEIGHT;
-    // Указатель на данные один раз
-    const float* data = output.ptr<float>();
-    const float confidence_threshold = CONFIDENCE_THRESHOLD;
-    const float score_threshold = SCORE_THRESHOLD;
-    const int dimensions = class_name.size() + 5;
-    // Динамическое определение для совместимости 11 и 5 версий (размер выходного тензора разный)
-    const int rows = outputs[0].size[1];
-    // Резервируем память (Решил сделать 10 процентов обнаружений)
-    result.class_ids.reserve(rows / 10);
-    result.confidences.reserve(rows / 10);
-    result.boxes.reserve(rows / 10);
-    result.class_names.reserve(rows / 10);
-    // Цикл обработки
-    for (int i = 0; i < rows; ++i)
-    {
-        float confidence = data[4];
-        if (confidence >= confidence_threshold)
-        {
-            const float* classes_scores = data + 5;
-            // Ручной поиск максимального класса (быстрее чем minMaxLoc)
-            int max_class_id = 0;
-            float max_class_score = classes_scores[0];
-            for (int j = 1; j < num_classes_to_check; ++j)
-            {
-                if (classes_scores[j] > max_class_score)
-                {
-                    max_class_score = classes_scores[j];
-                    max_class_id = j;
-                }
-            }
 
-            if (max_class_score > score_threshold)
-            {
-                result.confidences.push_back(confidence);
-                result.class_ids.push_back(max_class_id);
-                // Вычисление координат огр рамки
-                float cx = data[0];
-                float cy = data[1];
-                float w = data[2];
-                float h = data[3];
+    const float confidence_threshold = CONFIDENCE_THRESHOLD;  // должно быть 0.5 или выше
+    const float score_threshold = SCORE_THRESHOLD;            // должно быть 0.25 или выше
 
-                int left = static_cast<int>((cx - 0.5f * w) * x_factor);
-                int top = static_cast<int>((cy - 0.5f * h) * y_factor);
-                int width = static_cast<int>(w * x_factor);
-                int height = static_cast<int>(h * y_factor);
+    // ВАЖНО: Используйте высокие пороги для фильтрации мусора
+    const float FINAL_CONF_THRESHOLD = 0.5f;  // Минимум 50% уверенности
+    const float FINAL_NMS_THRESHOLD = 0.45f;  // Порог для NMS
 
-                result.boxes.push_back(cv::Rect(left, top, width, height));
-                result.class_names.push_back(class_name[max_class_id]);
+    // Ресайзим выход для удобства обработки
+    cv::Mat detections(num_detections, num_features, CV_32F);
+
+    // Копируем данные с транспонированием
+    const float* src_data = output.ptr<float>();
+    float* dst_data = detections.ptr<float>();
+
+    // Транспонирование: [1, 84, 8400] -> [8400, 84]
+    for (int i = 0; i < num_detections; ++i) {
+        for (int j = 0; j < num_features; ++j) {
+            dst_data[i * num_features + j] = src_data[j * num_detections + i];
+        }
+    }
+
+    // Собираем детекции
+    std::vector<cv::Rect> all_boxes;
+    std::vector<float> all_confidences;
+    std::vector<int> all_class_ids;
+
+    for (int i = 0; i < num_detections; ++i) {
+        const float* detection = detections.ptr<float>(i);
+
+        // Первые 4 значения: cx, cy, width, height
+        float cx = detection[0];
+        float cy = detection[1];
+        float width = detection[2];
+        float height = detection[3];
+
+        // Находим лучший класс (начиная с 4-го элемента)
+        float best_class_confidence = 0;
+        int best_class_id = -1;
+
+        for (int c = 4; c < num_features; ++c) {
+            float class_confidence = detection[c];
+            if (class_confidence > best_class_confidence) {
+                best_class_confidence = class_confidence;
+                best_class_id = c - 4;  // -4 потому что первые 4 - bbox
             }
         }
-        data += dimensions;
+
+        // Пропускаем если confidence слишком низкий
+        if (best_class_confidence < FINAL_CONF_THRESHOLD) {
+            continue;
+        }
+
+        // Преобразуем координаты
+        int left = static_cast<int>((cx - width * 0.5f) * x_factor);
+        int top = static_cast<int>((cy - height * 0.5f) * y_factor);
+        int w = static_cast<int>(width * x_factor);
+        int h = static_cast<int>(height * y_factor);
+
+        // Проверяем валидность координат
+        left = std::max(0, left);
+        top = std::max(0, top);
+        w = std::min(w, input_image.cols - left);
+        h = std::min(h, input_image.rows - top);
+
+        if (w <= 2 || h <= 2) continue;  // слишком маленький
+
+        all_boxes.push_back(cv::Rect(left, top, w, h));
+        all_confidences.push_back(best_class_confidence);
+        all_class_ids.push_back(best_class_id);
     }
+
+    std::cout << "После первичной фильтрации: " << all_boxes.size() << " детекций" << std::endl;
+
+    // ПРИМЕНЯЕМ NMS для устранения дубликатов
+    std::vector<int> indices;
+    if (!all_boxes.empty()) {
+        try {
+            cv::dnn::NMSBoxes(all_boxes, all_confidences,
+                FINAL_CONF_THRESHOLD, FINAL_NMS_THRESHOLD, indices);
+
+            std::cout << "После NMS осталось: " << indices.size() << " детекций" << std::endl;
+        }
+        catch (const cv::Exception& e) {
+            std::cerr << "Ошибка NMS: " << e.what() << std::endl;
+            return result;
+        }
+    }
+
+    // Заполняем результат
+    for (int idx : indices) {
+        result.boxes.push_back(all_boxes[idx]);
+        result.confidences.push_back(all_confidences[idx]);
+        result.class_ids.push_back(all_class_ids[idx]);
+
+        if (all_class_ids[idx] >= 0 && all_class_ids[idx] < class_name.size()) {
+            result.class_names.push_back(class_name[all_class_ids[idx]]);
+        }
+        else {
+            result.class_names.push_back("unknown");
+        }
+    }
+
+    // Выводим результаты
+    std::cout << "Итоговых детекций: " << result.boxes.size() << std::endl;
+    for (size_t i = 0; i < result.boxes.size() && i < 10; ++i) {
+        std::cout << "  " << i << ": " << result.class_names[i]
+            << " (conf: " << result.confidences[i]
+            << ", box: [" << result.boxes[i].x << ", " << result.boxes[i].y
+            << ", " << result.boxes[i].width << ", " << result.boxes[i].height
+            << "])" << std::endl;
+    }
+
     return result;
 }

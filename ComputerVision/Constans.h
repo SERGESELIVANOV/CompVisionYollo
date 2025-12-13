@@ -4,11 +4,11 @@
 const float INPUT_WIDTH = 640.0;
 const float INPUT_HEIGHT = 640.0;
 // Фильтрация оценнок классов с малой вероятностью 
-const float SCORE_THRESHOLD = 0.5;
+const float SCORE_THRESHOLD = 0.25;
 // Для перекрывающих рамки, что бы их убрать
 const float NMS_THRESHOLD = 0.45;
 // Фильтрация маловероятных обнаружений 
-const float CONFIDENCE_THRESHOLD = 0.45;
+const float CONFIDENCE_THRESHOLD = 0.5;
 // Параметры текста тегов
 const float FONT_SCALE = 0.7;
 const int FONT_FACE = cv::FONT_HERSHEY_SIMPLEX;
