@@ -5,18 +5,4 @@ C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\Constans.h(9,29):
 C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\Constans.h(13,26): warning C4305: инициализация: усечение из "double" в "float"
   (компиляция исходного файла "ComputerVision.cpp")
   
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,80): warning C4244: аргумент: преобразование "const float" в "_Tp", возможна потеря данных
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:         with
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:         [
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:             _Tp=int
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,80): warning C4244:         ]
-  (компиляция исходного файла "ComputerVision.cpp")
-  
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,67): warning C4244: аргумент: преобразование "const float" в "_Tp", возможна потеря данных
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:         with
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:         [
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:             _Tp=int
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\pred_and_post_processes.h(16,67): warning C4244:         ]
-  (компиляция исходного файла "ComputerVision.cpp")
-  
-  ComputerVision.vcxproj -> C:\Users\polezhaev\source\repos\CompVisionYollo\x64\Debug\ComputerVision.exe
+  ComputerVision.vcxproj -> C:\Users\polezhaev\Source\Repos\CompVisionYollo\x64\Debug\ComputerVision.exe

@@ -8,6 +8,9 @@
 #include <vector>
 #include <filesystem>
 #include <string>
+#include <unordered_map>
+#include <algorithm>
+#include <cctype>
 #include <direct.h>
 #include <sys/stat.h>
 #include <cstdio>

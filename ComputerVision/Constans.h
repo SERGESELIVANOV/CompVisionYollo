@@ -1,19 +1,19 @@
 #pragma once
-// Константы описывающие двоичный обьект
-// Размер
+// РџР°СЂР°РјРµС‚СЂС‹ РІС…РѕРґРЅРѕРіРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+// Р Р°Р·РјРµСЂ
 const float INPUT_WIDTH = 640.0;
 const float INPUT_HEIGHT = 640.0;
-// Фильтрация оценнок классов с малой вероятностью 
-const float SCORE_THRESHOLD = 0.25;
-// Для перекрывающих рамки, что бы их убрать
+// РџРѕСЂРѕРі РІРµСЂРѕСЏС‚РЅРѕСЃС‚Рё Р±РѕРєСЃР° Рё РґР»СЏ NMS 
+const float SCORE_THRESHOLD = 0.5;
+// Р”Р»СЏ РѕС‚СЂРёСЃРѕРІРєРё РїРѕРґРїРёСЃРё, РµСЃР»Рё РЅРµ Р·Р°РґР°С‚СЊ
 const float NMS_THRESHOLD = 0.45;
-// Фильтрация маловероятных обнаружений 
+// РџРѕСЂРѕРі СѓРІРµСЂРµРЅРЅРѕСЃС‚Рё РёС‚РѕРіРѕРІС‹Р№
 const float CONFIDENCE_THRESHOLD = 0.5;
-// Параметры текста тегов
+// РќР°СЃС‚СЂРѕР№РєРё С€СЂРёС„С‚Р°
 const float FONT_SCALE = 0.7;
 const int FONT_FACE = cv::FONT_HERSHEY_SIMPLEX;
 const int THICKNESS = 1;
-// Цвета для тегов
+// Р¦РІРµС‚Р° РґР»СЏ РїРѕРґРїРёСЃРµР№
 cv::Scalar BLACK = cv::Scalar(0, 0, 0);
 cv::Scalar BLUE = cv::Scalar(255, 178, 50);
 cv::Scalar YELLOW = cv::Scalar(0, 255, 255);
