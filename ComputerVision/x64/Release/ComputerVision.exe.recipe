@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\detection\ComputerVision\x64\Release\ComputerVision.exe</FullPath>
+      <FullPath>C:\Users\polezhaev\Source\Repos\CompVisionYollo\x64\Release\ComputerVision.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

@@ -53,16 +53,16 @@ int main()
     setlocale(LC_ALL, "Russian");
 
     // Настройки путей по умолчанию (можно менять прямо здесь)
-    const std::string DEFAULT_IMAGES_DIR = "C:/Users/polezhaev/Desktop/forprog/photo";
+    const std::string DEFAULT_IMAGES_DIR = "C:/Users/polezhaev/Desktop/Materials/photo";
     const std::string DEFAULT_OUTPUT_DIR = "C:/Users/polezhaev/source/repos/CompVisionYollo/ComputerVision/tags";
     const std::string DEFAULT_PRESET = "yolov5";
 
     const std::unordered_map<std::string, ModelPreset> presets = {
-        { "yolo11", { "C:/Users/polezhaev/Desktop/forprog/yolo11n.onnx",
-                      "C:/Users/polezhaev/Desktop/forprog/coco.names",
+        { "yolo11", { "C:/Users/polezhaev/Desktop/Materials/yolo11n.onnx",
+                      "C:/Users/polezhaev/Desktop/Materials/coco.names",
                       cv::Size(640, 640), 0.5f, 0.45f } },
-        { "yolov5", { "C:/Users/polezhaev/Desktop/forprog/best.onnx",
-                      "C:/Users/polezhaev/Desktop/forprog/lvis.names",
+        { "yolov5", { "C:/Users/polezhaev/Desktop/Materials/best.onnx",
+                      "C:/Users/polezhaev/Desktop/Materials/lvis.names",
                       cv::Size(640, 640), 0.4f, 0.45f } }
     };
 
