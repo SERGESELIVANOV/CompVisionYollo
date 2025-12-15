@@ -1,0 +1,11 @@
+https://drive.google.com/drive/folders/1HNbnGUrqHnSva7guu1I9qNM2_t_elnmb
+
+На Google Disk загружены модели:
+1. yolov5m
+2. yolo11n
+
+Также загружены соответствующие файлы с названиями объектов:
+1. lvis.names для yolov5m (Из датасета LVIS)
+2. coco.names для yolo11n (Из датасета COCO)
+
+Датасет LVIS это расширенный датасет COCO, т.к тренировка и разметка происходила на одинаковой базе фотографий.
