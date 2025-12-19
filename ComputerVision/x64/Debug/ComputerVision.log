@@ -1,8 +1,8 @@
 ﻿  ComputerVision.cpp
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\Constans.h(9,29): warning C4305: инициализация: усечение из "double" в "float"
+C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\Constans.h(8,29): warning C4305: инициализация: усечение из "double" в "float"
   (компиляция исходного файла "ComputerVision.cpp")
   
-C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\Constans.h(13,26): warning C4305: инициализация: усечение из "double" в "float"
+C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\Constans.h(12,26): warning C4305: инициализация: усечение из "double" в "float"
   (компиляция исходного файла "ComputerVision.cpp")
   
   ComputerVision.vcxproj -> C:\Users\polezhaev\Source\Repos\CompVisionYollo\x64\Debug\ComputerVision.exe

@@ -6,15 +6,17 @@
 
 namespace
 {
+    // Настройки модели: пути к весам и меткам, размер входа, пороги детекции
     struct ModelPreset
     {
         std::string weights;
         std::string labels;
         cv::Size input_size{ 640, 640 };
-        float conf_threshold{ 0.5f };
-        float nms_threshold{ 0.45f };
+        float conf_threshold{ 0.5f };      // Минимальная уверенность для детекции (0.0-1.0)
+        float nms_threshold{ 0.45f };      // Порог для Non-Maximum Suppression (удаление дубликатов)
     };
 
+    // Загружает список классов из .names файла (по одной строке на класс)
     bool loadClassList(const std::string& names_path, std::vector<std::string>& class_list)
     {
         std::ifstream ifs(names_path);
@@ -35,6 +37,7 @@ namespace
         return !class_list.empty();
     }
 
+    // Проверяет, поддерживается ли формат изображения (jpg, jpeg, png, bmp)
     bool isSupportedImage(const std::filesystem::path& path)
     {
         if (!path.has_extension())
@@ -53,10 +56,11 @@ int main()
     setlocale(LC_ALL, "Russian");
 
     // Настройки путей по умолчанию (можно менять прямо здесь)
-    const std::string DEFAULT_IMAGES_DIR = "C:/Users/polezhaev/Desktop/Materials/photo";
-    const std::string DEFAULT_OUTPUT_DIR = "C:/Users/polezhaev/source/repos/CompVisionYollo/ComputerVision/tags";
-    const std::string DEFAULT_PRESET = "yolov5";
+    const std::string DEFAULT_IMAGES_DIR = "C:/Users/polezhaev/Desktop/Materials/photo";  // Папка с входными изображениями
+    const std::string DEFAULT_OUTPUT_DIR = "C:/Users/polezhaev/source/repos/CompVisionYollo/ComputerVision/tags";  // Папка для сохранения результатов
+    const std::string DEFAULT_PRESET = "yolov5";  // Выбор модели: "yolo11" (COCO) или "yolov5" (LVIS)
 
+    // Предустановленные конфигурации моделей YOLO
     const std::unordered_map<std::string, ModelPreset> presets = {
         { "yolo11", { "C:/Users/polezhaev/Desktop/Materials/yolo11n.onnx",
                       "C:/Users/polezhaev/Desktop/Materials/coco.names",
@@ -122,9 +126,11 @@ int main()
         return 1;
     }
 
+    // Получаем имена выходных слоёв сети (для YOLO обычно один слой)
     const std::vector<std::string> output_layers = net.getUnconnectedOutLayersNames();
     const InferenceParams params{ runtime.input_size, runtime.conf_threshold, runtime.nms_threshold };
 
+    // Обработка всех изображений в папке
     size_t processed_images = 0;
     for (const auto& entry : std::filesystem::directory_iterator(images_path))
     {
@@ -140,10 +146,14 @@ int main()
             continue;
         }
 
+        // Препроцессинг: подготовка изображения и запуск нейросети
         std::vector<cv::Mat> detections = pre_process(frame, net, params, output_layers);
+        // Постпроцессинг: парсинг выходов сети, фильтрация по порогам, NMS
         Detection detection_photo = post_process(frame, detections, class_list, params);
+        // Отрисовка найденных объектов на изображении
         cv::Mat img = drawDetections(frame, detection_photo.boxes, detection_photo.confidences, detection_photo.class_ids, class_list);
 
+        // Измерение времени инференса и отрисовка на изображении
         std::vector<double> layersTimes;
         double freq = cv::getTickFrequency() / 1000.0;
         double t = net.getPerfProfile(layersTimes) / freq;
@@ -151,6 +161,7 @@ int main()
         snprintf(time_label, sizeof(time_label), "Inference time: %.2f ms", t);
         cv::putText(img, time_label, cv::Point(20, 40), FONT_FACE, FONT_SCALE, RED);
 
+        // Сохранение: берём первый найденный класс или "no_detection" если ничего не найдено
         const std::string main_tag = detection_photo.class_names.empty() ? "no_detection" : detection_photo.class_names.front();
         saveProcessedImage(img, main_tag, output_path);
         ++processed_images;
