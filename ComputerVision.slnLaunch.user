@@ -1,0 +1,11 @@
+[
+  {
+    "Name": "Новый профиль",
+    "Projects": [
+      {
+        "Path": "ComputerVision\\ComputerVision.vcxproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
