@@ -6,7 +6,7 @@ C:\Users\polezhaev\source\repos\CompVisionYollo\ComputerVision\Constans.h(12,26)
   (компиляция исходного файла "ComputerVision.cpp")
   
   Создание кода
-  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+  Previous IPDB not found, fall back to full compilation.
   All 1189 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Создание кода завершено
   ComputerVision.vcxproj -> C:\Users\polezhaev\Source\Repos\CompVisionYollo\x64\Release\ComputerVision.exe
