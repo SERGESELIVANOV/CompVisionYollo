@@ -1,4 +1,4 @@
-#include "Libraries.h"
+﻿#include "Libraries.h"
 #include "Constans.h"
 #include "Draw.h"
 #include "pred_and_post_processes.h"
@@ -58,7 +58,7 @@ int main()
     // Настройки путей по умолчанию (можно менять прямо здесь)
     const std::string DEFAULT_IMAGES_DIR = "C:/Users/polezhaev/Desktop/Materials/photo";  // Папка с входными изображениями
     const std::string DEFAULT_OUTPUT_DIR = "C:/Users/polezhaev/source/repos/CompVisionYollo/ComputerVision/tags";  // Папка для сохранения результатов
-    const std::string DEFAULT_PRESET = "yolo11";  // Выбор модели: "yolo11" (COCO) или "yolov5" (LVIS)
+    const std::string DEFAULT_PRESET = "yolov5";  // Выбор модели: "yolo11" (COCO) или "yolov5" (LVIS)
 
     // Предустановленные конфигурации моделей YOLO
     const std::unordered_map<std::string, ModelPreset> presets = {

@@ -69,9 +69,9 @@ void GUI::on_startButton_clicked()
     }
 
     // Проверяем существование ComputerVision.exe
-    QString computerVisionPath = QDir::currentPath() + "/ComputerVision/x64/Release/ComputerVision.exe";
+    QString computerVisionPath = "C:/Users/polezhaev/source/repos/CompVisionYollo/x64/Release/ComputerVision.exe";
     if (!QFile::exists(computerVisionPath)) {
-        computerVisionPath = QDir::currentPath() + "/ComputerVision/x64/Debug/ComputerVision.exe";
+        computerVisionPath = "C:/Users/polezhaev/source/repos/CompVisionYollo/x64/Debug/ComputerVision.exe";
         if (!QFile::exists(computerVisionPath)) {
             QMessageBox::critical(this, "Ошибка", "Не найден исполняемый файл ComputerVision.exe!\n"
                                 "Сначала соберите проект ComputerVision.");
