@@ -1,13 +1,9 @@
-<<<<<<< Current (Your changes)
-=======
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <QProcess>
 #include <QFileDialog>
 #include <QDir>
-#include <QFutureWatcher>
-#include <QPointer>
-#include "ComputerVision.h"
 #include "ui_GUI.h"
 
 class GUI : public QMainWindow
@@ -22,16 +18,17 @@ private slots:
     void on_inputDirButton_clicked();
     void on_outputDirButton_clicked();
     void on_startButton_clicked();
-    void onProcessingFinished();
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onProcessError(QProcess::ProcessError error);
+    void onReadyReadStandardOutput();
+    void onReadyReadStandardError();
 
 private:
     Ui::GUIClass ui;
-    QFutureWatcher<int> m_futureWatcher;
-    bool m_isProcessing{ false };
+    QProcess* process;
 
     void logMessage(const QString& message);
     void setControlsEnabled(bool enabled);
     QString getModelPreset() const;
 };
 
->>>>>>> Incoming (Background Agent changes)
