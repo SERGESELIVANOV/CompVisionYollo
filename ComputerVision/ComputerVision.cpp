@@ -16,7 +16,7 @@ namespace
         float nms_threshold{ 0.45f };      // Порог для Non-Maximum Suppression (удаление дубликатов)
     };
 
-    // Загружает список классов из .names файла (по одной строке на класс)
+    // Загружает список классов из .names файла (по одной строке на класс
     bool loadClassList(const std::string& names_path, std::vector<std::string>& class_list)
     {
         std::ifstream ifs(names_path);
