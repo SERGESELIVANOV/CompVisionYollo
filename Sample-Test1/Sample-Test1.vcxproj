@@ -104,9 +104,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\opencv\build\include\opencv2\dnn.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\opencv\build\include\opencv2\opencv.hpp" />
     <ClInclude Include="..\ComputerVision\creating_folders.h" />
     <ClInclude Include="..\ComputerVision\pred_and_post_processes.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp" />
@@ -127,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="elefant.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Sample-Test1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

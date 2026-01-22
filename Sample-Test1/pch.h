@@ -7,8 +7,7 @@
 #include "gtest/gtest.h"
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <opencv2/opencv.hpp>
-#include <iostream>
+#include <C:/opencv/build/include/opencv2>
 #include <fstream>
 #include <vector>
 #include <filesystem>
