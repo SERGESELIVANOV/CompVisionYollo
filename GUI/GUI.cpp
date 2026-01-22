@@ -1,9 +1,8 @@
 #include "GUI.h"
 #include <QMessageBox>
-#include <QStandardPaths>
 
 GUI::GUI(QWidget* parent)
-    : QMainWindow(parent), m_detector(nullptr), m_isProcessing(false)
+    : QMainWindow(parent), m_worker(nullptr), m_workerThread(nullptr), m_isProcessing(false)
 {
     ui.setupUi(this);
 
@@ -21,8 +20,9 @@ GUI::GUI(QWidget* parent)
 
 GUI::~GUI()
 {
-    if (m_detector) {
-        delete m_detector;
+    if (m_workerThread && m_workerThread->isRunning()) {
+        m_workerThread->quit();
+        m_workerThread->wait();
     }
 }
 
@@ -69,17 +69,21 @@ void GUI::on_startButton_clicked()
         return;
     }
 
-    // Создаем детектор объектов
-    if (m_detector) {
-        delete m_detector;
-    }
-    m_detector = new ObjectDetector(this);
+    // Создаем worker и поток
+    m_worker = new Worker();
+    m_workerThread = new QThread();
 
-    connect(m_detector, &ObjectDetector::progressUpdated, this, &GUI::onProgressUpdated);
-    connect(m_detector, &ObjectDetector::logMessage, this, &GUI::onLogMessage);
-    connect(m_detector, &ObjectDetector::processingFinished, this, &GUI::onProcessingFinished);
+    m_worker->moveToThread(m_workerThread);
+
+    // Подключаем сигналы
+    connect(m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
+    connect(m_worker, &Worker::progressUpdated, this, &GUI::onProgressUpdated);
+    connect(m_worker, &Worker::logMessage, this, &GUI::onLogMessage);
+    connect(m_worker, &Worker::processingFinished, this, &GUI::onProcessingFinished);
+    connect(m_worker, &Worker::initializationFinished, this, &GUI::onInitializationFinished);
 
     QString modelType = getModelPreset();
+    m_worker->setParameters(modelType, inputDir, outputDir);
 
     setControlsEnabled(false);
     ui.progressBar->setValue(0);
@@ -91,16 +95,11 @@ void GUI::on_startButton_clicked()
     logMessage("Выходная папка: " + outputDir);
     logMessage("Модель: " + ui.modelComboBox->currentText());
 
-    // Инициализируем детектор
-    if (!m_detector->initialize(modelType, inputDir, outputDir)) {
-        setControlsEnabled(true);
-        m_isProcessing = false;
-        QMessageBox::critical(this, "Ошибка", "Не удалось инициализировать детектор объектов!");
-        return;
-    }
+    // Запускаем поток
+    m_workerThread->start();
 
-    // Запускаем обработку
-    m_detector->processImages();
+    // Запускаем инициализацию и обработку
+    QMetaObject::invokeMethod(m_worker, "process", Qt::QueuedConnection);
 }
 
 void GUI::onProgressUpdated(int percentage)
@@ -127,6 +126,34 @@ void GUI::onProcessingFinished(bool success, const QString& message)
         logMessage("Обработка завершилась с ошибкой: " + message);
         QMessageBox::warning(this, "Ошибка", "Во время обработки произошла ошибка!\n"
             "Проверьте логи для получения подробной информации.");
+    }
+
+    // Очищаем ресурсы
+    if (m_workerThread) {
+        m_workerThread->quit();
+        m_workerThread->wait();
+        delete m_workerThread;
+        m_workerThread = nullptr;
+        m_worker = nullptr;
+    }
+}
+
+void GUI::onInitializationFinished(bool success)
+{
+    if (!success) {
+        logMessage("Ошибка инициализации модели!");
+        QMessageBox::critical(this, "Ошибка", "Не удалось инициализировать модель!");
+        setControlsEnabled(true);
+        m_isProcessing = false;
+
+        // Очищаем ресурсы
+        if (m_workerThread) {
+            m_workerThread->quit();
+            m_workerThread->wait();
+            delete m_workerThread;
+            m_workerThread = nullptr;
+            m_worker = nullptr;
+        }
     }
 }
 

@@ -43,6 +43,9 @@
     <ClCompile Include="ObjectDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Worker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\Desktop\Materials\best.onnx">
@@ -60,6 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ObjectDetector.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Worker.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
