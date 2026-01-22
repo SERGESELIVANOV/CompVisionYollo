@@ -1,0 +1,27 @@
+//
+// pch.h
+//
+
+#pragma once
+
+#include "gtest/gtest.h"
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <filesystem>
+#include <string>
+#include <unordered_map>
+#include <algorithm>
+#include <cctype>
+#include <direct.h>
+#include <sys/stat.h>
+#include <cstdio>
+#include <cstring>
+#include <errno.h>
+#include <io.h>
+#include <sstream>
+#include <iomanip>
+
