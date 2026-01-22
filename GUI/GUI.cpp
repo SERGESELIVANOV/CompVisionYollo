@@ -75,7 +75,7 @@ void GUI::on_startButton_clicked()
 
     m_worker->moveToThread(m_workerThread);
 
-    // Подключаем сигналы
+    // Подключаем сигнал
     connect(m_workerThread, &QThread::finished, m_worker, &QObject::deleteLater);
     connect(m_worker, &Worker::progressUpdated, this, &GUI::onProgressUpdated);
     connect(m_worker, &Worker::logMessage, this, &GUI::onLogMessage);
