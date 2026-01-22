@@ -9,9 +9,10 @@
     <AdminTargetDir>@ApplicationsDir@/ComputerVisionYOLO</AdminTargetDir>
     <MaintenanceToolName>MaintenanceTool</MaintenanceToolName>
     <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
-    <ControlScript>control.qs</ControlScript>
-    <!-- Убрали неподдерживаемые элементы -->
-    <!-- WizardStyle, PageReferences не поддерживаются в этой версии -->
+    
+    <!-- Временно отключено - включите после создания иконки -->
+    <!-- <InstallerApplicationIcon>installer_icon.ico</InstallerApplicationIcon> -->
+    <!-- <InstallerWindowIcon>installer_icon.ico</InstallerWindowIcon> -->
     
     <RemoteRepositories>
         <Repository>

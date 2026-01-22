@@ -85,5 +85,24 @@
     <ClInclude Include="pred_and_post_processes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GUI.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Documents\app_icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="app_icon.rc">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Documents\plusplus.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

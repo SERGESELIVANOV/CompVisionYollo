@@ -35,7 +35,25 @@ if not exist "packages\compvision.app\data\GUI.exe" (
     exit /b 1
 )
 
-REM Создаем установщик (деинсталлятор создается автоматически)
+REM Копируем иконку установщика
+echo Checking for installer icon...
+if exist "..\GUI\app_icon.ico" (
+    copy "..\GUI\app_icon.ico" "config\installer_icon.ico" >nul
+    echo ✓ Copied installer icon from GUI folder
+) else (
+    echo ⚠ Warning: app_icon.ico not found in GUI folder
+    echo Creating default icon placeholder...
+    echo. > config\installer_icon.ico
+)
+
+REM Проверяем, что иконка создана
+if not exist "config\installer_icon.ico" (
+    echo ✗ Error: Could not create installer icon
+    pause
+    exit /b 1
+)
+
+REM Создаем установщик
 echo Creating installer...
 "%QT_IFW_DIR%\bin\binarycreator.exe" ^
     --offline-only ^
@@ -53,12 +71,14 @@ if %errorlevel% equ 0 (
     echo Size: 
     for %%A in ("ComputerVisionYOLO_Installer.exe") do echo   %%~zA bytes
     echo.
-    echo After installation, users can uninstall via:
-    echo - MaintenanceTool.exe in the program folder
-    echo - Windows "Programs and Features"
+    echo Features:
+    echo - Custom installer icon
+    echo - Desktop and Start Menu shortcuts with app icon
+    echo - Automatic uninstaller
     echo ============================================
 ) else (
     echo ✗ Error creating installer! Code: %errorlevel%
+    echo Check if all required files exist and paths are correct.
 )
 
 if exist "exclude.txt" del exclude.txt

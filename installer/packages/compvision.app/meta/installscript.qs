@@ -13,13 +13,17 @@ Component.prototype.createOperations = function()
             "@TargetDir@/GUI.exe", 
             "@DesktopDir@/Computer Vision YOLO.lnk",
             "workingDirectory=@TargetDir@",
+            "iconPath=@TargetDir@/GUI.exe",
+            "iconId=0",
             "description=Computer Vision Object Detection");
         
-        // Добавляем в меню Пуск
+        // Добавляем в меню Пуск с иконкой
         component.addOperation("CreateShortcut", 
             "@TargetDir@/GUI.exe", 
             "@StartMenuDir@/Computer Vision YOLO.lnk",
             "workingDirectory=@TargetDir@",
+            "iconPath=@TargetDir@/GUI.exe", 
+            "iconId=0",
             "description=Computer Vision Object Detection");
             
         // Создаем ярлык для деинсталлятора
