@@ -16,9 +16,9 @@ public:
     ~GUI();
 
 private slots:
-    void on_inputDirButton_clicked();
-    void on_outputDirButton_clicked();
-    void on_startButton_clicked();
+    void onInputDirButtonClicked();
+    void onOutputDirButtonClicked();
+    void onStartButtonClicked();
     void onProgressUpdated(int percentage);
     void onLogMessage(const QString& message);
     void onProcessingFinished(bool success, const QString& message);

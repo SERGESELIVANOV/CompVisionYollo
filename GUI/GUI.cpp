@@ -6,10 +6,10 @@ GUI::GUI(QWidget* parent)
 {
     ui.setupUi(this);
 
-    // Подключаем сигналы к слотам
-    connect(ui.inputDirButton, &QPushButton::clicked, this, &GUI::on_inputDirButton_clicked);
-    connect(ui.outputDirButton, &QPushButton::clicked, this, &GUI::on_outputDirButton_clicked);
-    connect(ui.startButton, &QPushButton::clicked, this, &GUI::on_startButton_clicked);
+    // Подключаем сигналы к слотам c флагом Qt::UniqueConnection, чтобы избежать дублирования
+    connect(ui.inputDirButton, &QPushButton::clicked, this, &GUI::onInputDirButtonClicked, Qt::UniqueConnection);
+    connect(ui.outputDirButton, &QPushButton::clicked, this, &GUI::onOutputDirButtonClicked, Qt::UniqueConnection);
+    connect(ui.startButton, &QPushButton::clicked, this, &GUI::onStartButtonClicked, Qt::UniqueConnection);
 
     // Устанавливаем начальный текст в полях
     ui.inputDirEdit->setText("C:/Users/polezhaev/Desktop/Materials/photo");
@@ -26,7 +26,7 @@ GUI::~GUI()
     }
 }
 
-void GUI::on_inputDirButton_clicked()
+void GUI::onInputDirButtonClicked()
 {
     QString dir = QFileDialog::getExistingDirectory(this, "Выберите папку с изображениями",
         ui.inputDirEdit->text());
@@ -35,7 +35,7 @@ void GUI::on_inputDirButton_clicked()
     }
 }
 
-void GUI::on_outputDirButton_clicked()
+void GUI::onOutputDirButtonClicked()
 {
     QString dir = QFileDialog::getExistingDirectory(this, "Выберите папку для результатов",
         ui.outputDirEdit->text());
@@ -44,7 +44,7 @@ void GUI::on_outputDirButton_clicked()
     }
 }
 
-void GUI::on_startButton_clicked()
+void GUI::onStartButtonClicked()
 {
     if (m_isProcessing) {
         return; // Уже обрабатываем
