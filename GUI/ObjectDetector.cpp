@@ -8,10 +8,10 @@ ObjectDetector::ObjectDetector(QObject* parent)
     , m_totalImages(0)
     , m_processedImages(0)
 {
-    // Настройки путей по умолчанию
+    // РќР°СЃС‚СЂРѕР№РєРё РїСѓС‚РµР№ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
     const QString basePath = QDir::currentPath() + "/../Materials";
 
-    // Предустановленные конфигурации моделей YOLO
+    // РџСЂРµРґСѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹Рµ РєРѕРЅС„РёРіСѓСЂР°С†РёРё РјРѕРґРµР»РµР№ YOLO
     m_presets = {
         { "yolo11", { (basePath + "/yolo11n.onnx").toStdString(),
                       (basePath + "/coco.names").toStdString(),
@@ -31,7 +31,7 @@ bool ObjectDetector::initialize(const QString& modelType, const QString& inputDi
     auto preset_it = m_presets.find(modelType.toStdString());
     if (preset_it == m_presets.end())
     {
-        emit logMessage("Неизвестный preset: " + modelType);
+        emit logMessage("РќРµРёР·РІРµСЃС‚РЅС‹Р№ preset: " + modelType);
         return false;
     }
 
@@ -39,22 +39,22 @@ bool ObjectDetector::initialize(const QString& modelType, const QString& inputDi
     m_inputPath = std::filesystem::path(inputDir.toStdString());
     m_outputPath = std::filesystem::path(outputDir.toStdString());
 
-    // Проверяем существование файлов и папок
+    // РџСЂРѕРІРµСЂСЏРµРј СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ С„Р°Р№Р»РѕРІ Рё РїР°РїРѕРє
     if (!std::filesystem::exists(m_currentPreset.weights))
     {
-        emit logMessage("Ошибка открытия весов: " + QString::fromStdString(m_currentPreset.weights));
+        emit logMessage("РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ РІРµСЃРѕРІ: " + QString::fromStdString(m_currentPreset.weights));
         return false;
     }
 
     if (!std::filesystem::exists(m_currentPreset.labels))
     {
-        emit logMessage("Ошибка открытия файла меток: " + QString::fromStdString(m_currentPreset.labels));
+        emit logMessage("РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р° РјРµС‚РѕРє: " + QString::fromStdString(m_currentPreset.labels));
         return false;
     }
 
     if (!std::filesystem::exists(m_inputPath))
     {
-        emit logMessage("Ошибка доступа к папке с изображениями: " + inputDir);
+        emit logMessage("РћС€РёР±РєР° РґРѕСЃС‚СѓРїР° Рє РїР°РїРєРµ СЃ РёР·РѕР±СЂР°Р¶РµРЅРёСЏРјРё: " + inputDir);
         return false;
     }
 
@@ -62,30 +62,30 @@ bool ObjectDetector::initialize(const QString& modelType, const QString& inputDi
     std::filesystem::create_directories(m_outputPath, out_ec);
     if (!std::filesystem::exists(m_outputPath))
     {
-        emit logMessage("Ошибка доступа к папке для сохранения: " + outputDir);
+        emit logMessage("РћС€РёР±РєР° РґРѕСЃС‚СѓРїР° Рє РїР°РїРєРµ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ: " + outputDir);
         return false;
     }
 
-    // Загружаем список классов
+    // Р—Р°РіСЂСѓР¶Р°РµРј СЃРїРёСЃРѕРє РєР»Р°СЃСЃРѕРІ
     if (!loadClassList(m_currentPreset.labels, m_classList))
     {
-        emit logMessage("Не удалось загрузить список классов.");
+        emit logMessage("РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ СЃРїРёСЃРѕРє РєР»Р°СЃСЃРѕРІ.");
         return false;
     }
 
-    // Загружаем модель
+    // Р—Р°РіСЂСѓР¶Р°РµРј РјРѕРґРµР»СЊ
     m_net = cv::dnn::readNet(m_currentPreset.weights);
     if (m_net.empty())
     {
-        emit logMessage("Не удалось загрузить модель: " + QString::fromStdString(m_currentPreset.weights));
+        emit logMessage("РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РјРѕРґРµР»СЊ: " + QString::fromStdString(m_currentPreset.weights));
         return false;
     }
 
-    // Получаем имена выходных слоев сети
+    // РџРѕР»СѓС‡Р°РµРј РёРјРµРЅР° РІС‹С…РѕРґРЅС‹С… СЃР»РѕРµРІ СЃРµС‚Рё
     m_outputLayers = m_net.getUnconnectedOutLayersNames();
     m_inferenceParams = { m_currentPreset.input_size, m_currentPreset.conf_threshold, m_currentPreset.nms_threshold };
 
-    emit logMessage("Модель успешно инициализирована: " + modelType);
+    emit logMessage("РњРѕРґРµР»СЊ СѓСЃРїРµС€РЅРѕ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅР°: " + modelType);
     return true;
 }
 
@@ -94,7 +94,7 @@ void ObjectDetector::processImages()
     m_processedImages = 0;
     m_totalImages = 0;
 
-    // Подсчитываем общее количество изображений
+    // РџРѕРґСЃС‡РёС‚С‹РІР°РµРј РѕР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РёР·РѕР±СЂР°Р¶РµРЅРёР№
     for (const auto& entry : std::filesystem::directory_iterator(m_inputPath))
     {
         if (entry.is_regular_file() && isSupportedImage(entry.path()))
@@ -105,14 +105,14 @@ void ObjectDetector::processImages()
 
     if (m_totalImages == 0)
     {
-        emit processingFinished(false, "В указанной папке не найдено подходящих изображений");
+        emit processingFinished(false, "Р’ СѓРєР°Р·Р°РЅРЅРѕР№ РїР°РїРєРµ РЅРµ РЅР°Р№РґРµРЅРѕ РїРѕРґС…РѕРґСЏС‰РёС… РёР·РѕР±СЂР°Р¶РµРЅРёР№");
         return;
     }
 
-    emit logMessage(QString("Найдено изображений для обработки: %1").arg(m_totalImages));
+    emit logMessage(QString("РќР°Р№РґРµРЅРѕ РёР·РѕР±СЂР°Р¶РµРЅРёР№ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё: %1").arg(m_totalImages));
     emit progressUpdated(0);
 
-    // Обрабатываем все изображения
+    // РћР±СЂР°Р±Р°С‚С‹РІР°РµРј РІСЃРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
     for (const auto& entry : std::filesystem::directory_iterator(m_inputPath))
     {
         if (!entry.is_regular_file() || !isSupportedImage(entry.path()))
@@ -123,26 +123,26 @@ void ObjectDetector::processImages()
         cv::Mat frame = cv::imread(entry.path().string(), cv::IMREAD_COLOR);
         if (frame.empty())
         {
-            emit logMessage("Ошибка чтения изображения: " + QString::fromStdWString(entry.path().wstring()));
+            emit logMessage("РћС€РёР±РєР° С‡С‚РµРЅРёСЏ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ: " + QString::fromStdWString(entry.path().wstring()));
             continue;
         }
 
-        // Препроцессинг: подготовка изображения и запуск нейросети
+        // РџСЂРµРїСЂРѕС†РµСЃСЃРёРЅРі: РїРѕРґРіРѕС‚РѕРІРєР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ Рё Р·Р°РїСѓСЃРє РЅРµР№СЂРѕСЃРµС‚Рё
         std::vector<cv::Mat> detections = pre_process(frame, m_net, m_inferenceParams, m_outputLayers);
-        // Постпроцессинг: парсинг выходов сети, фильтрация по порогам, NMS
+        // РџРѕСЃС‚РїСЂРѕС†РµСЃСЃРёРЅРі: РїР°СЂСЃРёРЅРі РІС‹С…РѕРґРѕРІ СЃРµС‚Рё, С„РёР»СЊС‚СЂР°С†РёСЏ РїРѕ РїРѕСЂРѕРіР°Рј, NMS
         Detection detection_photo = post_process(frame, detections, m_classList, m_inferenceParams);
-        // Отрисовка найденных объектов на изображении
+        // РћС‚СЂРёСЃРѕРІРєР° РЅР°Р№РґРµРЅРЅС‹С… РѕР±СЉРµРєС‚РѕРІ РЅР° РёР·РѕР±СЂР°Р¶РµРЅРёРё
         cv::Mat img = drawDetections(frame, detection_photo.boxes, detection_photo.confidences, detection_photo.class_ids, m_classList);
 
-        // Измерение времени инференса и отрисовка на изображении
+        // РР·РјРµСЂРµРЅРёРµ РІСЂРµРјРµРЅРё РёРЅС„РµСЂРµРЅСЃР° Рё РѕС‚СЂРёСЃРѕРІРєР° РЅР° РёР·РѕР±СЂР°Р¶РµРЅРёРё
         std::vector<double> layersTimes;
         double freq = cv::getTickFrequency() / 1000.0;
         double t = m_net.getPerfProfile(layersTimes) / freq;
         char time_label[64];
         snprintf(time_label, sizeof(time_label), "Inference time: %.2f ms", t);
-        cv::putText(img, time_label, cv::Point(20, 40), FONT_FACE, FONT_SCALE, RED);
+        cv::putText(img, time_label, cv::Point(20, 40), FONT_FACE, FONT_SCALE, cv::Scalar(0, 0, 255));
 
-        // Сохранение: берём первый найденный класс или "no_detection" если ничего не найдено
+        // РЎРѕС…СЂР°РЅРµРЅРёРµ: Р±РµСЂРµРј РїРµСЂРІС‹Р№ РЅР°Р№РґРµРЅРЅС‹Р№ РєР»Р°СЃСЃ РёР»Рё "no_detection" РµСЃР»Рё РЅРёС‡РµРіРѕ РЅРµ РЅР°Р№РґРµРЅРѕ
         const std::string main_tag = detection_photo.class_names.empty() ? "no_detection" : detection_photo.class_names.front();
         saveProcessedImage(img, main_tag, m_outputPath);
 
@@ -150,10 +150,10 @@ void ObjectDetector::processImages()
         int progress = static_cast<int>((m_processedImages * 100) / m_totalImages);
         emit progressUpdated(progress);
 
-        emit logMessage(QString("Обработано: %1/%2").arg(m_processedImages).arg(m_totalImages));
+        emit logMessage(QString("РћР±СЂР°Р±РѕС‚Р°РЅРѕ: %1/%2").arg(m_processedImages).arg(m_totalImages));
     }
 
-    emit processingFinished(true, QString("Обработано изображений: %1").arg(m_processedImages));
+    emit processingFinished(true, QString("РћР±СЂР°Р±РѕС‚Р°РЅРѕ РёР·РѕР±СЂР°Р¶РµРЅРёР№: %1").arg(m_processedImages));
 }
 
 bool ObjectDetector::isSupportedImage(const std::filesystem::path& path) const
