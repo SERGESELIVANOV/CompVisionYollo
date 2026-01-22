@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Computer Vision YOLO</Name>
+    <Version>1.0.0</Version>
+    <Title>Computer Vision Object Detection</Title>
+    <Publisher>Your Company</Publisher>
+    <StartMenuDir>Computer Vision YOLO</StartMenuDir>
+    <TargetDir>@ApplicationsDir@/ComputerVisionYOLO</TargetDir>
+    <AdminTargetDir>@ApplicationsDir@/ComputerVisionYOLO</AdminTargetDir>
+    <MaintenanceToolName>MaintenanceTool</MaintenanceToolName>
+    <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+    <ControlScript>control.qs</ControlScript>
+    <!-- Убрали неподдерживаемые элементы -->
+    <!-- WizardStyle, PageReferences не поддерживаются в этой версии -->
+    
+    <RemoteRepositories>
+        <Repository>
+            <Url>https://your-update-server.com</Url>
+            <Enabled>0</Enabled>
+        </Repository>
+    </RemoteRepositories>
+</Installer>

@@ -12,8 +12,8 @@ GUI::GUI(QWidget* parent)
     connect(ui.startButton, &QPushButton::clicked, this, &GUI::onStartButtonClicked, Qt::UniqueConnection);
 
     // Устанавливаем начальный текст в полях
-    ui.inputDirEdit->setText("C:/Users/polezhaev/Desktop/Materials/photo");
-    ui.outputDirEdit->setText(QDir::currentPath() + "/ComputerVision/tags");
+    ui.inputDirEdit->setText("");
+    ui.outputDirEdit->setText("");
 
     logMessage("Приложение запущено. Выберите папки и нажмите 'Запустить обработку'");
 }
