@@ -8,16 +8,16 @@ ObjectDetector::ObjectDetector(QObject* parent)
     , m_totalImages(0)
     , m_processedImages(0)
 {
-    // Настройки путей по умолчанию
-    const QString basePath = QDir::currentPath() + "/../Materials";
+    // Абсолютные пути к моделям в папке GUI/Materials
+    const QString materialsPath = QDir::currentPath() + "/Materials/";
 
     // Предустановленные конфигурации моделей YOLO
     m_presets = {
-        { "yolo11", { (basePath + "/yolo11n.onnx").toStdString(),
-                      (basePath + "/coco.names").toStdString(),
+        { "yolo11", { (materialsPath + "yolo11n.onnx").toStdString(),
+                      (materialsPath + "coco.names").toStdString(),
                       cv::Size(640, 640), 0.5f, 0.45f } },
-        { "yolov5", { (basePath + "/best.onnx").toStdString(),
-                      (basePath + "/lvis.names").toStdString(),
+        { "yolov5", { (materialsPath + "best.onnx").toStdString(),
+                      (materialsPath + "lvis.names").toStdString(),
                       cv::Size(640, 640), 0.4f, 0.45f } }
     };
 }
