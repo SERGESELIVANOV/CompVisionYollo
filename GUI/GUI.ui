@@ -93,12 +93,22 @@
           <widget class="QComboBox" name="modelComboBox">
            <item>
             <property name="text">
-             <string>YOLO11 (COCO dataset)</string>
+             <string>YOLO26 (COCO dataset)</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>YOLOv5 (LVIS dataset)</string>
+             <string>YOLO11 (COCO dataset)</string>
+            </property>
+           </item>
+		   <item>
+            <property name="text">
+             <string>YOLO5 (LVIS dataset)</string>
+            </property>
+           </item>
+		   <item>
+            <property name="text">
+             <string>YOLO11 custom (Criminology dataset)</string>
             </property>
            </item>
           </widget>

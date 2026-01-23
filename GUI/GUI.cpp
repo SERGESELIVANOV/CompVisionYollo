@@ -174,10 +174,16 @@ void GUI::setControlsEnabled(bool enabled)
 QString GUI::getModelPreset() const
 {
     // Возвращает preset на основе выбранной модели
-    if (ui.modelComboBox->currentIndex() == 0) {
+    switch (ui.modelComboBox->currentIndex()) {
+    case 0:
+        return "yolo26n";
+    case 1:
         return "yolo11";
-    }
-    else {
+    case 2:
         return "yolov5";
+    case 3:
+        return "yolo11_3_datasets_cars";
+    default:
+        return "yolo26n"; // default fallback
     }
 }

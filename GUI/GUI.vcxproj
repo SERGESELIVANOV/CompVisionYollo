@@ -69,8 +69,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PostBuildEvent>
@@ -420,9 +422,9 @@ if "$(Configuration)"=="Release" (
     <None Include="..\..\..\..\Desktop\Materials\lvis.names" />
     <None Include="..\..\..\..\Desktop\Materials\yolo11n.onnx" />
     <None Include="..\..\..\..\Documents\criminology.names" />
-    <None Include="..\..\..\..\Documents\yolo11_best.onnx" />
-    <None Include="..\..\..\..\Documents\yolo11_last.onnx" />
     <None Include="..\..\..\..\Documents\yolo26n.onnx" />
+    <None Include="..\..\..\..\Downloads\Telegram Desktop\yolo11_3_datasets_cars.onnx" />
+    <None Include="..\..\..\..\Downloads\Telegram Desktop\yolo11_3_datasets_no_cars.onnx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constans.h" />

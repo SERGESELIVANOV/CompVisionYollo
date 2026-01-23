@@ -13,12 +13,18 @@ ObjectDetector::ObjectDetector(QObject* parent)
 
     // Предустановленные конфигурации моделей YOLO
     m_presets = {
+        { "yolo26n", { (materialsPath + "yolo26n.onnx").toStdString(),
+                       (materialsPath + "coco.names").toStdString(),
+                       cv::Size(640, 640), 0.5f, 0.45f } },
         { "yolo11", { (materialsPath + "yolo11n.onnx").toStdString(),
                       (materialsPath + "coco.names").toStdString(),
                       cv::Size(640, 640), 0.5f, 0.45f } },
         { "yolov5", { (materialsPath + "best.onnx").toStdString(),
                       (materialsPath + "lvis.names").toStdString(),
-                      cv::Size(640, 640), 0.4f, 0.45f } }
+                      cv::Size(640, 640), 0.4f, 0.45f } },
+        { "yolo11_3_datasets_cars", { (materialsPath + "yolo11_3_datasets_cars.onnx").toStdString(),
+                                      (materialsPath + "criminology.names").toStdString(),
+                                      cv::Size(640, 640), 0.5f, 0.45f } }
     };
 }
 
