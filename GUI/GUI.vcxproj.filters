@@ -60,6 +60,18 @@
     <None Include="..\..\..\..\Desktop\Materials\yolo11n.onnx">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\..\..\..\Documents\yolo11_best.onnx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\Documents\yolo11_last.onnx">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\Documents\criminology.names">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\..\..\Documents\yolo26n.onnx">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ObjectDetector.h">

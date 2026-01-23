@@ -419,6 +419,10 @@ if "$(Configuration)"=="Release" (
     <None Include="..\..\..\..\Desktop\Materials\coco.names" />
     <None Include="..\..\..\..\Desktop\Materials\lvis.names" />
     <None Include="..\..\..\..\Desktop\Materials\yolo11n.onnx" />
+    <None Include="..\..\..\..\Documents\criminology.names" />
+    <None Include="..\..\..\..\Documents\yolo11_best.onnx" />
+    <None Include="..\..\..\..\Documents\yolo11_last.onnx" />
+    <None Include="..\..\..\..\Documents\yolo26n.onnx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constans.h" />
