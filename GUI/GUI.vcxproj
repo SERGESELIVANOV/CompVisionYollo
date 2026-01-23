@@ -72,6 +72,302 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PostBuildEvent>
+      <Command>REM === QtIFW Direct Integration for CompVisionYollo ===
+
+if "$(Configuration)"=="Release" (
+    echo.
+    echo ================================================
+    echo Creating Qt Installer Framework installer...
+    echo ================================================
+    echo.
+    
+    REM === STEP 1: Prepare release folder ===
+    echo [1/5] Preparing release folder...
+    
+    REM Create release directory
+    if not exist "$(SolutionDir)release" mkdir "$(SolutionDir)release"
+    
+    REM Copy GUI.exe from build output
+    echo Copying GUI.exe...
+    copy "$(TargetPath)" "$(SolutionDir)release\" &gt;nul
+    if %errorlevel% neq 0 (
+        echo ERROR: Failed to copy GUI.exe
+        exit 1
+    )
+    
+    REM Run windeployqt for Qt dependencies
+    echo Running windeployqt...
+    "$(QTDIR)\bin\windeployqt.exe" "$(SolutionDir)release\GUI.exe" --release --no-translations --no-compiler-runtime
+    if %errorlevel% neq 0 (
+        echo ERROR: windeployqt failed
+        exit 1
+    )
+    
+    REM Copy OpenCV DLL
+    echo Copying OpenCV DLL...
+    if exist "C:\opencv\build\x64\vc16\bin\opencv_world4120.dll" (
+        copy "C:\opencv\build\x64\vc16\bin\opencv_world4120.dll" "$(SolutionDir)release\" &gt;nul
+        echo OpenCV DLL copied successfully
+    ) else (
+        echo WARNING: OpenCV DLL not found at expected location
+    )
+    
+    REM Copy Materials folder
+    echo Copying Materials...
+    if exist "$(ProjectDir)Materials" (
+        xcopy "$(ProjectDir)Materials" "$(SolutionDir)release\Materials\" /E /I /H /Y &gt;nul
+        echo Materials copied successfully
+    ) else (
+        echo WARNING: Materials folder not found
+    )
+    
+    echo Release preparation completed.
+    echo.
+    
+    REM === STEP 2: Prepare installer data ===
+    echo [2/5] Preparing installer data...
+    
+    REM Clean and create installer data directory
+    if exist "$(SolutionDir)installer\packages\compvision.app\data" rmdir /s /q "$(SolutionDir)installer\packages\compvision.app\data"
+    mkdir "$(SolutionDir)installer\packages\compvision.app\data"
+    
+    REM Copy release files to installer data (excluding debug files)
+    echo Copying files to installer package...
+    for %%f in ("$(SolutionDir)release\*") do (
+        REM Skip debug files
+        echo %%~nxf | findstr /R "\.pdb$\|\.log$\|\.tlog$" &gt;nul
+        if errorlevel 1 (
+            copy "%%f" "$(SolutionDir)installer\packages\compvision.app\data\" &gt;nul
+        )
+    )
+    
+    REM Copy Materials subdirectory
+    if exist "$(SolutionDir)release\Materials" (
+        xcopy "$(SolutionDir)release\Materials" "$(SolutionDir)installer\packages\compvision.app\data\Materials\" /E /I /H /Y &gt;nul
+    )
+    
+    REM Copy Qt platform plugins etc.
+    for /d %%d in ("$(SolutionDir)release\*") do (
+        if exist "%%d" (
+            xcopy "%%d" "$(SolutionDir)installer\packages\compvision.app\data\%%~nxd\" /E /I /H /Y &gt;nul
+        )
+    )
+    
+    echo Installer data prepared.
+    echo.
+    
+    REM === STEP 3: Copy installer icon ===
+    echo [3/5] Setting up installer icon...
+    
+    if exist "$(ProjectDir)app_icon.ico" (
+        copy "$(ProjectDir)app_icon.ico" "$(SolutionDir)installer\config\installer_icon.ico" &gt;nul
+        echo Installer icon copied
+    ) else (
+        echo WARNING: app_icon.ico not found in project directory
+    )
+    
+    REM === STEP 4: Validate QtIFW installation ===
+    echo [4/5] Validating Qt Installer Framework...
+    
+    REM Try to find QtIFW in common locations
+    set "QT_IFW_DIR="
+    
+    if exist "C:\Qt\Tools\QtInstallerFramework\4.10\bin\binarycreator.exe" (
+        set "QT_IFW_DIR=C:\Qt\Tools\QtInstallerFramework\4.10"
+    ) else if exist "C:\Qt\Tools\QtInstallerFramework\4.6\bin\binarycreator.exe" (
+        set "QT_IFW_DIR=C:\Qt\Tools\QtInstallerFramework\4.6"
+    ) else (
+        REM Try to find in PATH
+        where binarycreator.exe &gt;nul 2&gt;&amp;1
+        if %errorlevel% equ 0 (
+            for /f "tokens=*" %%i in ('where binarycreator.exe') do (
+                for %%j in ("%%~dpi..") do set "QT_IFW_DIR=%%~fj"
+            )
+        ) else (
+            echo ERROR: Qt Installer Framework not found!
+            echo Please ensure QtIFW is installed and binarycreator.exe is in PATH
+            echo or update QT_IFW_DIR in this script
+            exit 1
+        )
+    )
+    
+    echo QtIFW found at: %QT_IFW_DIR%
+    
+    REM === STEP 5: Create installer ===
+    echo [5/5] Creating installer...
+    
+    cd "$(SolutionDir)installer"
+    
+    "%QT_IFW_DIR%\bin\binarycreator.exe" ^
+        --offline-only ^
+        -c config\config.xml ^
+        -p packages ^
+        "$(SolutionDir)ComputerVisionYOLO_Installer.exe"
+    
+    if %errorlevel% equ 0 (
+        echo.
+        echo ================================================
+        echo ✓ Installer created successfully!
+        echo File: $(SolutionDir)ComputerVisionYOLO_Installer.exe
+        echo ================================================
+        echo.
+    ) else (
+        echo ERROR: Failed to create installer! Code: %errorlevel%
+        exit 1
+    )
+)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PostBuildEvent>
+      <Command>REM === QtIFW Direct Integration for CompVisionYollo ===
+
+if "$(Configuration)"=="Release" (
+    echo.
+    echo ================================================
+    echo Creating Qt Installer Framework installer...
+    echo ================================================
+    echo.
+    
+    REM === STEP 1: Prepare release folder ===
+    echo [1/5] Preparing release folder...
+    
+    REM Create release directory
+    if not exist "$(SolutionDir)release" mkdir "$(SolutionDir)release"
+    
+    REM Copy GUI.exe from build output
+    echo Copying GUI.exe...
+    copy "$(TargetPath)" "$(SolutionDir)release\" &gt;nul
+    if %errorlevel% neq 0 (
+        echo ERROR: Failed to copy GUI.exe
+        exit 1
+    )
+    
+    REM Run windeployqt for Qt dependencies
+    echo Running windeployqt...
+    "$(QTDIR)\bin\windeployqt.exe" "$(SolutionDir)release\GUI.exe" --release --no-translations --no-compiler-runtime
+    if %errorlevel% neq 0 (
+        echo ERROR: windeployqt failed
+        exit 1
+    )
+    
+    REM Copy OpenCV DLL
+    echo Copying OpenCV DLL...
+    if exist "C:\opencv\build\x64\vc16\bin\opencv_world4120.dll" (
+        copy "C:\opencv\build\x64\vc16\bin\opencv_world4120.dll" "$(SolutionDir)release\" &gt;nul
+        echo OpenCV DLL copied successfully
+    ) else (
+        echo WARNING: OpenCV DLL not found at expected location
+    )
+    
+    REM Copy Materials folder
+    echo Copying Materials...
+    if exist "$(ProjectDir)Materials" (
+        xcopy "$(ProjectDir)Materials" "$(SolutionDir)release\Materials\" /E /I /H /Y &gt;nul
+        echo Materials copied successfully
+    ) else (
+        echo WARNING: Materials folder not found
+    )
+    
+    echo Release preparation completed.
+    echo.
+    
+    REM === STEP 2: Prepare installer data ===
+    echo [2/5] Preparing installer data...
+    
+    REM Clean and create installer data directory
+    if exist "$(SolutionDir)installer\packages\compvision.app\data" rmdir /s /q "$(SolutionDir)installer\packages\compvision.app\data"
+    mkdir "$(SolutionDir)installer\packages\compvision.app\data"
+    
+    REM Copy release files to installer data (excluding debug files)
+    echo Copying files to installer package...
+    for %%f in ("$(SolutionDir)release\*") do (
+        REM Skip debug files
+        echo %%~nxf | findstr /R "\.pdb$\|\.log$\|\.tlog$" &gt;nul
+        if errorlevel 1 (
+            copy "%%f" "$(SolutionDir)installer\packages\compvision.app\data\" &gt;nul
+        )
+    )
+    
+    REM Copy Materials subdirectory
+    if exist "$(SolutionDir)release\Materials" (
+        xcopy "$(SolutionDir)release\Materials" "$(SolutionDir)installer\packages\compvision.app\data\Materials\" /E /I /H /Y &gt;nul
+    )
+    
+    REM Copy Qt platform plugins etc.
+    for /d %%d in ("$(SolutionDir)release\*") do (
+        if exist "%%d" (
+            xcopy "%%d" "$(SolutionDir)installer\packages\compvision.app\data\%%~nxd\" /E /I /H /Y &gt;nul
+        )
+    )
+    
+    echo Installer data prepared.
+    echo.
+    
+    REM === STEP 3: Copy installer icon ===
+    echo [3/5] Setting up installer icon...
+    
+    if exist "$(ProjectDir)app_icon.ico" (
+        copy "$(ProjectDir)app_icon.ico" "$(SolutionDir)installer\config\installer_icon.ico" &gt;nul
+        echo Installer icon copied
+    ) else (
+        echo WARNING: app_icon.ico not found in project directory
+    )
+    
+    REM === STEP 4: Validate QtIFW installation ===
+    echo [4/5] Validating Qt Installer Framework...
+    
+    REM Try to find QtIFW in common locations
+    set "QT_IFW_DIR="
+    
+    if exist "C:\Qt\Tools\QtInstallerFramework\4.10\bin\binarycreator.exe" (
+        set "QT_IFW_DIR=C:\Qt\Tools\QtInstallerFramework\4.10"
+    ) else if exist "C:\Qt\Tools\QtInstallerFramework\4.6\bin\binarycreator.exe" (
+        set "QT_IFW_DIR=C:\Qt\Tools\QtInstallerFramework\4.6"
+    ) else (
+        REM Try to find in PATH
+        where binarycreator.exe &gt;nul 2&gt;&amp;1
+        if %errorlevel% equ 0 (
+            for /f "tokens=*" %%i in ('where binarycreator.exe') do (
+                for %%j in ("%%~dpi..") do set "QT_IFW_DIR=%%~fj"
+            )
+        ) else (
+            echo ERROR: Qt Installer Framework not found!
+            echo Please ensure QtIFW is installed and binarycreator.exe is in PATH
+            echo or update QT_IFW_DIR in this script
+            exit 1
+        )
+    )
+    
+    echo QtIFW found at: %QT_IFW_DIR%
+    
+    REM === STEP 5: Create installer ===
+    echo [5/5] Creating installer...
+    
+    cd "$(SolutionDir)installer"
+    
+    "%QT_IFW_DIR%\bin\binarycreator.exe" ^
+        --offline-only ^
+        -c config\config.xml ^
+        -p packages ^
+        "$(SolutionDir)ComputerVisionYOLO_Installer.exe"
+    
+    if %errorlevel% equ 0 (
+        echo.
+        echo ================================================
+        echo ✓ Installer created successfully!
+        echo File: $(SolutionDir)ComputerVisionYOLO_Installer.exe
+        echo ================================================
+        echo.
+    ) else (
+        echo ERROR: Failed to create installer! Code: %errorlevel%
+        exit 1
+    )
+)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
